@@ -11,61 +11,6 @@ Se trata de un contrato básico de crowdfunding en Rust que permite a creadores 
 
 ---
 
-## Funciones del Contrato
-
-| Función           | Descripción                                                              | Firma                                                                                  |
-| ----------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `__constructor`   | Inicializa el contrato con admin y token                                 | `(admin: address, token: address) -> Result<(), Error>`                                |
-| `create_campaign` | Crea una campaña con goal y min_donation                                 | `(creator: address, goal: i128, min_donation: i128) -> Result<(), Error>`              |
-| `get_campaign`    | Obtiene los datos de una campaña                                         | `(campaign_address: address) -> Result<Campaign, Error>`                               |
-| `contribute`      | Permite a un usuario aportar a una campaña                               | `(contributor: address, campaign_address: address, amount: i128) -> Result<(), Error>` |
-| `withdraw`        | Permite al creador retirar fondos si goal fue alcanzado                  | `(creator: address) -> Result<(), Error>`                                              |
-| `refund`          | Permite a un contribuyente retirar su aporte si la campaña no tuvo éxito | `(contributor: address, campaign_address: address) -> Result<(), Error>`               |
-
----
-
-## Estructuras Principales
-
-```rust
-#[contracttype]
-struct Campaign {
-  goal: i128,
-  min_donation: i128,
-  supporters: u32,
-  total_raised: i128,
-}
-
-#[contracttype]
-struct Contribution {
-  amount: i128,
-}
-
-#[contracttype]
-enum DataKey {
-  Admin(),
-  Token(),
-  Campaign(address),
-  Contribution(address, address),
-}
-
-#[contracterror]
-enum Errors {
-  ContractInitialized = 0,
-  ContractNotInitialized = 1,
-  MathOverflow = 2,
-  MathUnderflow = 3,
-  CampaignNotFound = 4,
-  CampaignGoalExceeded = 5,
-  ContributionBelowMinimum = 6,
-  AmountMustBePositive = 7,
-  CampaignGoalNotReached = 8,
-  ContributionNotFound = 9,
-  CampaignAlreadyExists = 10,
-}
-```
-
----
-
 ## Setup
 
 ### Rust Toolchain
@@ -167,6 +112,61 @@ _Nota: devuelve `GDXAECCYWYW2QKQDTGVQUTC6CQEQR3REC3PKZKXOP76PJJ6V3FRYXCO3`_
 ```
 
 _Nota: devuelve `CBAH4Z5CNELXMN7PVW2SAAB6QVOID34SAQAFHJF7Q7JUNACRQEJX66MB`_
+
+---
+
+## Funciones del Contrato
+
+| Función           | Descripción                                                              | Firma                                                                                  |
+| ----------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `__constructor`   | Inicializa el contrato con admin y token                                 | `(admin: address, token: address) -> Result<(), Error>`                                |
+| `create_campaign` | Crea una campaña con goal y min_donation                                 | `(creator: address, goal: i128, min_donation: i128) -> Result<(), Error>`              |
+| `get_campaign`    | Obtiene los datos de una campaña                                         | `(campaign_address: address) -> Result<Campaign, Error>`                               |
+| `contribute`      | Permite a un usuario aportar a una campaña                               | `(contributor: address, campaign_address: address, amount: i128) -> Result<(), Error>` |
+| `withdraw`        | Permite al creador retirar fondos si goal fue alcanzado                  | `(creator: address) -> Result<(), Error>`                                              |
+| `refund`          | Permite a un contribuyente retirar su aporte si la campaña no tuvo éxito | `(contributor: address, campaign_address: address) -> Result<(), Error>`               |
+
+---
+
+## Estructuras Principales
+
+```rust
+#[contracttype]
+struct Campaign {
+  goal: i128,
+  min_donation: i128,
+  supporters: u32,
+  total_raised: i128,
+}
+
+#[contracttype]
+struct Contribution {
+  amount: i128,
+}
+
+#[contracttype]
+enum DataKey {
+  Admin(),
+  Token(),
+  Campaign(address),
+  Contribution(address, address),
+}
+
+#[contracterror]
+enum Errors {
+  ContractInitialized = 0,
+  ContractNotInitialized = 1,
+  MathOverflow = 2,
+  MathUnderflow = 3,
+  CampaignNotFound = 4,
+  CampaignGoalExceeded = 5,
+  ContributionBelowMinimum = 6,
+  AmountMustBePositive = 7,
+  CampaignGoalNotReached = 8,
+  ContributionNotFound = 9,
+  CampaignAlreadyExists = 10,
+}
+```
 
 ---
 
