@@ -1,9 +1,9 @@
-use soroban_sdk::{Address, Env};
+use soroban_sdk::{Address, Env, Vec};
 
 use crate::{
     events,
     storage::{
-        admin::get_admin, campaign::{has_campaign, set_campaign}, structs::campaign::Campaign, types::error::Error
+        admin::get_admin, campaign::{has_campaign, set_campaign}, structs::campaign::Campaign, types::error::Error, types::status::CampaignStatus
     },
 };
 
@@ -21,6 +21,8 @@ pub fn add_campaign(env: &Env, creator: Address, goal: i128, min_donation: i128)
         min_donation,
         total_raised: 0,
         supporters: 0,
+        status: CampaignStatus::Active,
+        contributors: Vec::new(&env),  // Inicializar lista vacía de contribuyentes
     };
 
     set_campaign(&env, &creator, &campaign);

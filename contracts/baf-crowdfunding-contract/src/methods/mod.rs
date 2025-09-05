@@ -1,5 +1,6 @@
 pub mod initialize;
 pub mod add_campaign;
+pub mod cancel_campaign;
 pub mod contribute;
 pub mod token;
 pub mod withdraw;

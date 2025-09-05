@@ -33,6 +33,11 @@ pub fn contribute(env: &Env, contributor: Address, campaign_address: Address, am
     campaign.total_raised += amount;
     campaign.supporters += 1;
     
+    // Agregar contribuyente a la lista si es la primera vez que contribuye
+    if !campaign.contributors.contains(&contributor) {
+        campaign.contributors.push_back(contributor.clone());
+    }
+        
     set_campaign(env, &campaign_address, &campaign);
     set_contribution(env, &campaign_address, &contributor, amount);
     events::contribute::add_contribute(&env, &contributor, &campaign_address, &amount);

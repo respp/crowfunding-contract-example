@@ -18,7 +18,7 @@ pub fn refund(env: &Env, contributor: Address, campaign_address: Address) -> Res
         return Err(Error::ContributionNotFound);
     }
 
-    let amount = get_contribution(env, &campaign_address, &contributor);
+    let amount = get_contribution(env, &campaign_address, &contributor)?;
     token_transfer(&env, &env.current_contract_address(), &contributor, &amount)?;
 
     campaign.total_raised -= amount;

@@ -3,6 +3,7 @@ use soroban_sdk::{contract, contractimpl, Env, Address};
 use crate::{
     methods::{
         add_campaign::add_campaign,
+        cancel_campaign::cancel_campaign,
         contribute::contribute,
         get_campaign::get_campaign,
         initialize::initialize,
@@ -42,5 +43,9 @@ impl CrowdfundingContract {
 
     pub fn refund(env: Env, contributor: Address, campaign_address: Address) -> Result<(), Error> {
         refund(&env, contributor, campaign_address)
+    }
+
+    pub fn cancel_campaign(env: Env, creator: Address) -> Result<(), Error> {
+        cancel_campaign(&env, creator)
     }
 }
