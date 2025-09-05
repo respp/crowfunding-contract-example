@@ -2,12 +2,12 @@ use soroban_sdk::{Address, Env};
 
 use crate::{
     events,
+    services::token_service::TokenService,
     storage::{
         campaign::{has_campaign, get_campaign, remove_campaign},
         contribution::{get_all_contributors, get_contribution, remove_contribution},
         types::error::Error
-    },
-    methods::token::token_transfer
+    }
 };
 
 pub fn cancel_campaign(env: &Env, creator: Address) -> Result<(), Error> {
@@ -38,12 +38,7 @@ pub fn cancel_campaign(env: &Env, creator: Address) -> Result<(), Error> {
             let amount = get_contribution(env, &creator, &contributor)?;
             
             // Transferir tokens de vuelta al contribuyente
-            token_transfer(
-                &env,
-                &env.current_contract_address(),
-                &contributor,
-                &amount
-            )?;
+            TokenService::transfer_from_contract(&env, &contributor, &amount)?;
             
             // Remover la contribución del storage
             remove_contribution(env, &creator, &contributor);

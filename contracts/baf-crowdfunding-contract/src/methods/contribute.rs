@@ -1,9 +1,11 @@
 use soroban_sdk::{Address, Env};
 use crate::{
     events,
-    methods::token::token_transfer,
+    services::token_service::TokenService,
     storage::{
-        campaign::{get_campaign, has_campaign, set_campaign}, contribution::set_contribution, types::error::Error
+        campaign::{get_campaign, has_campaign, set_campaign}, 
+        contribution::set_contribution, 
+        types::error::Error
     }
 };
 
@@ -28,7 +30,7 @@ pub fn contribute(env: &Env, contributor: Address, campaign_address: Address, am
         return Err(Error::CampaignGoalExceeded);
     }
 
-    token_transfer(&env, &contributor, &env.current_contract_address(), &amount)?;
+    TokenService::transfer_to_contract(&env, &contributor, &amount)?;
 
     campaign.total_raised += amount;
     campaign.supporters += 1;

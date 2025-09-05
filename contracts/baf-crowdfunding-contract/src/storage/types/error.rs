@@ -16,4 +16,5 @@ pub enum Error {
     ContributionNotFound = 9,
     CampaignAlreadyExists = 10,
     CampaignAlreadyCompleted = 11,
+    CannotTransferToSelf = 12,
 }

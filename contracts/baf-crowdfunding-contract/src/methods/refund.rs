@@ -2,10 +2,13 @@ use soroban_sdk::{Address, Env};
 
 use crate::{
     events,
-    methods::token::token_transfer, storage::{
-        campaign::{get_campaign, set_campaign}, contribution::{
+    services::token_service::TokenService,
+    storage::{
+        campaign::{get_campaign, set_campaign}, 
+        contribution::{
             get_contribution, has_contribution, remove_contribution
-        }, types::error::Error
+        }, 
+        types::error::Error
     }
 };
 
@@ -19,7 +22,7 @@ pub fn refund(env: &Env, contributor: Address, campaign_address: Address) -> Res
     }
 
     let amount = get_contribution(env, &campaign_address, &contributor)?;
-    token_transfer(&env, &env.current_contract_address(), &contributor, &amount)?;
+    TokenService::transfer_from_contract(&env, &contributor, &amount)?;
 
     campaign.total_raised -= amount;
     campaign.supporters -= 1;

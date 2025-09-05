@@ -2,7 +2,7 @@ use soroban_sdk::{Address, Env};
 
 use crate::{
     events,
-    methods::token::token_transfer,
+    services::token_service::TokenService,
     storage::{
         campaign::{get_campaign, remove_campaign},
         types::error::Error
@@ -18,12 +18,7 @@ pub fn withdraw(env: &Env, creator: Address) -> Result<(), Error> {
         return Err(Error::CampaignGoalNotReached);
     }
 
-    token_transfer(
-        &env,
-        &env.current_contract_address(),
-        &creator,
-        &campaign.total_raised
-    )?;
+    TokenService::transfer_from_contract(&env, &creator, &campaign.total_raised)?;
 
     remove_campaign(env, &creator);
     events::campaign::withdraw(&env, &creator, campaign.total_raised);
